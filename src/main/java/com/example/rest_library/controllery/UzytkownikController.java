@@ -3,6 +3,7 @@ package com.example.rest_library.controllery;
 import com.example.rest_library.DTO.LoginRequestDTO;
 import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.serwisy.UzytkownikService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,16 +71,31 @@ public class UzytkownikController {
 
     // 6. logowanie
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest)
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpSession session)
     {
         Optional<Uzytkownik> uzytkownik = uzytkownikService.findByUsername(loginRequest.getUsername());
         if(uzytkownik.isPresent() && uzytkownik.get().getPassword().equals(loginRequest.getPassword()))
         {
+            session.setAttribute("username", loginRequest.getUsername());
             return ResponseEntity.ok(uzytkownik.get());
         }
         else
         {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Zły login lub hasło!");
+        }
+    }
+
+    @GetMapping("/ktoZalogowany")
+    public ResponseEntity<String> ktoZalogowany(HttpSession session)
+    {
+        String login = (String) session.getAttribute("username");
+        if(login!=null)
+        {
+            return ResponseEntity.ok(login);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nie zalogowano!");
         }
     }
 

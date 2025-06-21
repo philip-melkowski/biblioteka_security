@@ -17,10 +17,14 @@
       </thead>
   </table>
 <script>
-  function getUsernameFromURL()
+  async function getUsernameFromSession()
   {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('username');
+      const response = await fetch('http://localhost:8080/api/uzytkownicy/ktoZalogowany');
+      if (!response.ok) {
+          throw new Error("blad pobierana danych");
+      }
+      const data = await response.text();
+      return data;
   }
   async function zaladujKsiazki(username) {
 
@@ -55,15 +59,17 @@
           document.body.innerHTML += "<p style='color: red;'>Nie udało się załadować danych użytkownika.</p>";
       }
   }
-  const username = getUsernameFromURL();
-  if(username)
-  {
-      zaladujKsiazki(username);
-  }
-  else
-  {
-      document.body.innerHTML += "<p style='color: red;'>Nie podano użytkownika.</p>";
-  }
+getUsernameFromSession().then(username =>
+    {
+        if(username != "Nie zalogowano!") {
+            zaladujKsiazki(username);
+        }
+        else
+        {
+            document.body.innerHTML += "<p style='color: red;'>Nie podano użytkownika.</p>";
+        }
+    }
+);
 
 
 </script>
