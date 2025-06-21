@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Twoja strona główna!</title>
+</head>
+<body>
+  <h1>Twoja strona <span id="display"> </span></h1>
+  <h2>Twoje przeczytanie ksiazki</h2>
+  <table id="tabela">
+      <thead>
+      <tr>
+          <th>ID</th>
+          <th>Tytuł</th>
+          <th>Ocena</th>
+      </tr>
+      </thead>
+  </table>
+<script>
+  function getUsernameFromURL()
+  {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('username');
+  }
+  async function zaladujKsiazki(username) {
+
+
+      const display = document.getElementById('display');
+      display.textContent = username;
+      try {
+          const response = await fetch('http://localhost:8080/api/przeczytane/uzytkownik/username/' + username);
+          if (!response.ok) {
+              throw new Error("blad pobierana danych");
+          }
+          const data = await response.json();
+          const tabela = document.getElementById('tabela');
+          data.forEach(item => {
+              const row = document.createElement('tr');
+              const idCell = document.createElement('td');
+              const titleCell = document.createElement('td');
+              const ratingCell = document.createElement('td');
+              idCell.textContent = item.ksiazkaId;
+              titleCell.textContent = item.ksiazkaTytul;
+              ratingCell.textContent = item.ocena ?? "Brak oceny";
+
+              row.appendChild(idCell);
+              row.appendChild(titleCell);
+              row.appendChild(ratingCell);
+              tabela.appendChild(row);
+
+
+          })
+      } catch (error) {
+          console.log(error);
+          document.body.innerHTML += "<p style='color: red;'>Nie udało się załadować danych użytkownika.</p>";
+      }
+  }
+  const username = getUsernameFromURL();
+  if(username)
+  {
+      zaladujKsiazki(username);
+  }
+  else
+  {
+      document.body.innerHTML += "<p style='color: red;'>Nie podano użytkownika.</p>";
+  }
+
+
+</script>
+
+</body>
+</html>

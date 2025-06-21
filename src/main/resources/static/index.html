@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <title>GoodReads ale wersja biedacka</title>
+</head>
+<body class="container">
+    <h1>Witaj w GudRids</h1>
+    <label for="username">Nazwa użytkownika:</label>
+    <input type="text" id="username" name="username" />
+    <label for="password">Hasło:</label>
+    <input type="text" id="password" name="password" />
+    <div class="przyciski">
+    <button onclick="zaloguj()">Zaloguj się</button>
+    <button onclick="window.location.href = 'rejestracja.html'">Zarejestruj się</button>
+    </div>
+
+    <p id="error" style="color: red"></p>
+
+    <script>
+        const zaloguj = async () =>
+        {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const error = document.getElementById("error");
+            error.textContent = "";
+
+            if(!username || !password)
+            {
+                error.textContent = "Zaloguj się lub załóż konto";
+                return;
+            }
+            try
+            {
+                const response = await fetch(`http://localhost:8080/api/uzytkownicy/login`,
+                    {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({username: username, password:  password})
+                    });
+                if(response.status === 401)
+                {
+                    return error.textContent = "zly login lub haslo";
+
+                }
+                if(!response.ok)
+                {
+                    error.textContent = "blad serwera";
+                    return;
+                }
+                window.location.href = `uzytkownik.html?username=${encodeURIComponent(username)}`;
+
+            }
+            catch(e)
+            {
+                console.error(e);
+            }
+        }
+    </script>
+
+</body>
+</html>
