@@ -67,5 +67,7 @@ public class KsiazkaService {
 
     public Optional<Ksiazka> findById(Long id) { return ksiazkaRepository.findById(id);}
 
+    public List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(String username) { return ksiazkaRepository.findByUzytkownikUsernameAndPrzeczytaneFalse(username);}
+
 
 }

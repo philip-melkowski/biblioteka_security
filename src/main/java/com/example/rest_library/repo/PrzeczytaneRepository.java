@@ -5,6 +5,7 @@ import com.example.rest_library.encje.Ksiazka;
 import com.example.rest_library.encje.Przeczytane;
 import com.example.rest_library.encje.Uzytkownik;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface PrzeczytaneRepository extends JpaRepository<Przeczytane, Long> 
      boolean existsByUzytkownikAndKsiazka(Uzytkownik uzytkownik, Ksiazka ksiazka);
 
      boolean existsByUzytkownikIdAndKsiazkaId(Long uzytkownik_id, Long ksiazka_id);
+
+
 }

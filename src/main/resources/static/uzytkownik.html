@@ -7,6 +7,7 @@
 <body>
   <h1>Twoja strona <span id="display"> </span></h1>
   <h2>Twoje przeczytanie ksiazki</h2>
+  <p><a href="dodajRecenzje.html" style="color: red; font-weight: bold;">Dodaj książkę</a></p>
   <table id="tabela">
       <thead>
       <tr>
@@ -16,12 +17,17 @@
       </tr>
       </thead>
   </table>
+
+
 <script>
   async function getUsernameFromSession()
   {
-      const response = await fetch('http://localhost:8080/api/uzytkownicy/ktoZalogowany');
+      const response = await fetch('http://localhost:8080/api/uzytkownicy/ktoZalogowany',
+          {
+              credentials: 'include'
+          });
       if (!response.ok) {
-          throw new Error("blad pobierana danych");
+          return "Nie zalogowano!";
       }
       const data = await response.text();
       return data;
@@ -56,7 +62,10 @@
           })
       } catch (error) {
           console.log(error);
-          document.body.innerHTML += "<p style='color: red;'>Nie udało się załadować danych użytkownika.</p>";
+          const blad = document.createElement('p');
+          blad.style.color = 'red';
+          blad.textContent = 'Nie udało się załadować danych użytkownika.';
+          document.body.appendChild(blad);
       }
   }
 getUsernameFromSession().then(username =>
@@ -66,7 +75,10 @@ getUsernameFromSession().then(username =>
         }
         else
         {
-            document.body.innerHTML += "<p style='color: red;'>Nie podano użytkownika.</p>";
+            const info = document.createElement('p');
+            info.style.color = "red";
+            info.textContent = "Nie zalogowano!";
+            document.body.appendChild(info);
         }
     }
 );

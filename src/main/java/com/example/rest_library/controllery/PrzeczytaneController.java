@@ -1,9 +1,11 @@
 package com.example.rest_library.controllery;
 
+import com.example.rest_library.DTO.KsiazkaDTO;
 import com.example.rest_library.DTO.PrzeczytaneDTO;
 import com.example.rest_library.encje.Przeczytane;
 import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.serwisy.PrzeczytaneService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class PrzeczytaneController {
     private final PrzeczytaneService przeczytaneService;
 
 
-    // 1. zwroc wszystkie reordy przeczytane
+    // 1. zwroc wszystkie rekordy przeczytane
     @GetMapping
     public List<PrzeczytaneDTO> findAll()
     {
@@ -73,14 +75,17 @@ public class PrzeczytaneController {
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Przeczytane przeczytane)
     {
+
         if(przeczytaneService.czyUzytkownikPrzeczytalKsiazke(przeczytane.getUzytkownik().getId(), przeczytane.getKsiazka().getId()))
         {
             return ResponseEntity.status(409).body("Uzytkownik juz przeczytal te ksiazke!\n");
         }
         Przeczytane savedPrzeczytane = przeczytaneService.save(przeczytane);
+
         return ResponseEntity.ok(new PrzeczytaneDTO(savedPrzeczytane));
     }
 
+    // 9. usun rekord
     @DeleteMapping("/{uzytkownikId}&{ksiazkaId}")
     public ResponseEntity<Void> delete(@PathVariable Long uzytkownikId, @PathVariable Long ksiazkaId)
     {
@@ -90,6 +95,10 @@ public class PrzeczytaneController {
         });
         return ResponseEntity.noContent().build();
     }
+
+
+
+
 
 
 

@@ -3,6 +3,8 @@ package com.example.rest_library.repo;
 import com.example.rest_library.encje.Autor;
 import com.example.rest_library.encje.Ksiazka;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,5 +31,9 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
     void deleteById(long id);
 
     Optional<Ksiazka> findById(long id);
+
+    // zwraca nieprzeczytane przez uzytkownika ksiazki
+    @Query("select k from Ksiazka k where NOT EXISTS (select p from Przeczytane p where p.ksiazka = k and p.uzytkownik.username = :username)")
+    List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username);
 
 }

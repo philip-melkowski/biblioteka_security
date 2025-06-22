@@ -85,6 +85,7 @@ public class UzytkownikController {
         }
     }
 
+    // 7. sprawdza jaki user jest zalgowowany
     @GetMapping("/ktoZalogowany")
     public ResponseEntity<String> ktoZalogowany(HttpSession session)
     {
@@ -92,6 +93,21 @@ public class UzytkownikController {
         if(login!=null)
         {
             return ResponseEntity.ok(login);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nie zalogowano!");
+        }
+    }
+
+    // 8. zwraca ID zalogowanego uzytkownika
+    @GetMapping("/getUserId")
+    public ResponseEntity<?> getUserId(HttpSession session)
+    {
+        String login = (String) session.getAttribute("username");
+        if(login!=null)
+        {
+            return ResponseEntity.ok(uzytkownikService.findByUsername(login).get().getId());
         }
         else
         {

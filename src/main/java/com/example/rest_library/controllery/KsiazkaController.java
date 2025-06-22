@@ -3,6 +3,7 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.KsiazkaDTO;
 import com.example.rest_library.encje.Ksiazka;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +87,14 @@ public class KsiazkaController {
     public ResponseEntity<KsiazkaDTO> findById(@PathVariable Long id)
     {
         return ksiazkaService.findById(id).map(k -> ResponseEntity.ok(new KsiazkaDTO(k))).orElse(ResponseEntity.notFound().build());
+    }
+
+    // 9. zwroc nieprzeczytane jeszcze
+    @GetMapping("/nieprzeczytane")
+    public List<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse(HttpSession session)
+    {
+        String username = (String) session.getAttribute("username");
+        return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(KsiazkaDTO::new).collect(Collectors.toList());
     }
 
 
