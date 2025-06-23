@@ -59,6 +59,7 @@ public class AutorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAutor);
     }
 
+    /*
     // 6. dodaj autora i zwroc jego adres
     @PostMapping("/dodaj")
     public ResponseEntity<Autor> addAutor2(@RequestBody Autor autor)
@@ -67,6 +68,8 @@ public class AutorController {
         URI location = URI.create("/api/autorzy/" + savedAutor.getId());
         return ResponseEntity.created(location).body(savedAutor);
     }
+
+     */
 
     // 7. usuna autora na podstawie ID
     @DeleteMapping("/{id}")

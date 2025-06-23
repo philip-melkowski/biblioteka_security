@@ -137,6 +137,20 @@ public class UzytkownikController {
         }
     }
 
+    // 9. zwraca role zalogowanego uzytkownika
+    @GetMapping("/rola")
+    public ResponseEntity<String> rolaZalogowanego()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null && auth.isAuthenticated())
+        {
+            return uzytkownikService.findByUsername(auth.getName())
+                    .map(u -> ResponseEntity.ok(u.getRola()))
+                    .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("brak"));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("brak");
+    }
+
 
 
 

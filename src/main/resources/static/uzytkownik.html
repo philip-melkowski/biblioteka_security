@@ -6,6 +6,10 @@
 </head>
 <body>
   <h1>Twoja strona <span id="display"> </span></h1>
+  <p id="adminOpcje" style="display: none;">
+      <a href="dodajKsiazke.html">Dodaj książkę</a>
+      <a href="dodajAutora.html">Dodaj autora</a>
+  </p>
   <h2>Twoje przeczytanie ksiazki</h2>
   <p><a href="dodajRecenzje.html" style="color: red; font-weight: bold;">Dodaj książkę</a></p>
   <input type="text" id="filtrAutor" placeholder="Wpisz autora, zeby znalezc ksiazki"/>
@@ -41,7 +45,7 @@
             }
         });
         if(licznik === 0) {
-            document.getElementById('srednia').textContent = 6;
+            document.getElementById('srednia').textContent = "Brak ocen";
             return;
         }
         const srednia = suma / licznik;
@@ -199,6 +203,17 @@ getUsernameFromSession().then(username =>
         }
     }
 );
+    fetch("/api/uzytkownicy/rola",
+        {
+            credentials: 'include'
+        })
+        .then(response => response.text())
+        .then(text => {
+            if(text === "ROLE_ADMIN") {
+                document.getElementById('adminOpcje').style.display = "block";
+            }
+        }
+        );
 
     filtrujAutora();
 
