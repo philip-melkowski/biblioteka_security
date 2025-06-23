@@ -17,7 +17,6 @@
 
 </head>
 <body>
-<
 <input type="text" id="imie" placeholder="Podaj imię/imiona"/>
 <input type="text" id="nazwisko" placeholder="Podaj nazwisko"/>
 <button onclick="dodajAutora()">Dodaj autora</button>
@@ -52,7 +51,7 @@
                 dodano.innerText = "";
                 error.innerText = "Autor już istnieje! nie dodano rekordu do bazy";
             }
-            else
+            else if(response.ok)
             {
                 dodano.innerText = "Dodano autora";
                 dodano.classList.remove("fade-out");
