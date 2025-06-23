@@ -3,6 +3,8 @@ package com.example.rest_library.serwisy;
 import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.repo.UzytkownikRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UzytkownikService {
     private final UzytkownikRepository uzytkownikRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Optional<Uzytkownik> findById(Long id)
     {
@@ -27,6 +32,8 @@ public class UzytkownikService {
     };
     public Uzytkownik save(Uzytkownik uzytkownik)
     {
+        String zakodowaneHaslo = passwordEncoder.encode(uzytkownik.getPassword());
+        uzytkownik.setPassword(zakodowaneHaslo);
         return uzytkownikRepository.save(uzytkownik);
     }
     public List<Uzytkownik> findAll() { return uzytkownikRepository.findAll();}

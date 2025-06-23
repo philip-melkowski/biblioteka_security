@@ -16,4 +16,6 @@ public interface AutorRepository extends JpaRepository<Autor, Long>{
 
     Optional<Autor> findById(Long id);
 
+    Optional<Autor> findByKsiazkiId(Long id);
+
 }

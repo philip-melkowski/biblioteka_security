@@ -5,8 +5,14 @@ import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.serwisy.UzytkownikService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,6 +26,9 @@ import java.util.Optional;
 public class UzytkownikController {
     private final UzytkownikService uzytkownikService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
 
     // 1. dodaj uzytkownika
     @PostMapping
@@ -30,7 +39,9 @@ public class UzytkownikController {
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("nazwa użytkownika zajęta");
         }
-        Uzytkownik savedUzytkownik = uzytkownikService.save(uzytkownik);
+        Uzytkownik savedUzytkownik = uzytkownik;
+        savedUzytkownik.setPassword(uzytkownik.getPassword());
+        uzytkownikService.save(savedUzytkownik);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUzytkownik);
     }
 
@@ -69,30 +80,37 @@ public class UzytkownikController {
         return uzytkownikService.findAll();
     }
 
-    // 6. logowanie
+
+    
+    // 6. logowanie - jednak zbedne
+    /*
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpSession session)
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest)
     {
-        Optional<Uzytkownik> uzytkownik = uzytkownikService.findByUsername(loginRequest.getUsername());
-        if(uzytkownik.isPresent() && uzytkownik.get().getPassword().equals(loginRequest.getPassword()))
+        try
         {
-            session.setAttribute("username", loginRequest.getUsername());
-            return ResponseEntity.ok(uzytkownik.get());
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return ResponseEntity.ok("zalogowano pomyślnie");
+
         }
-        else
+        catch(BadCredentialsException e)
         {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Zły login lub hasło!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Zły login lub haslo!");
         }
+
     }
+    */
+
 
     // 7. sprawdza jaki user jest zalgowowany
     @GetMapping("/ktoZalogowany")
-    public ResponseEntity<String> ktoZalogowany(HttpSession session)
+    public ResponseEntity<String> ktoZalogowany()
     {
-        String login = (String) session.getAttribute("username");
-        if(login!=null)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication!=null && authentication.isAuthenticated())
         {
-            return ResponseEntity.ok(login);
+            return ResponseEntity.ok(authentication.getName());
         }
         else
         {
@@ -104,11 +122,12 @@ public class UzytkownikController {
     @GetMapping("/getUserId")
     public ResponseEntity<?> getUserId(HttpSession session)
     {
-        String login = (String) session.getAttribute("username");
-        if(login!=null)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication!=null && authentication.isAuthenticated())
         {
-            return ResponseEntity.ok(uzytkownikService.findByUsername(login).get().getId());
+            return ResponseEntity.ok(uzytkownikService.findByUsername(authentication.getName()).get().getId());
         }
+
         else
         {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nie zalogowano!");

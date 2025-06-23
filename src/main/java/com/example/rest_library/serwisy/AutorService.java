@@ -48,4 +48,6 @@ public class AutorService {
 
     public Optional<Autor> findById(Long id) {return autorRepository.findById(id);}
 
+    public Optional<Autor> findByKsiazkiId(Long id) {return autorRepository.findByKsiazkiId(id);}
+
 }

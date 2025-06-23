@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.example.rest_library.serwisy.KsiazkaService;
 
@@ -54,10 +56,10 @@ public class KsiazkaController {
 
 
     // 5. dodaj ksiazke
-
     @PostMapping()
     public ResponseEntity<Ksiazka> addKsiazka(@RequestBody Ksiazka ksiazka)
     {
+
         Ksiazka savedKsiazka = ksiazkaService.save(ksiazka);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedKsiazka);
     }
@@ -91,11 +93,14 @@ public class KsiazkaController {
 
     // 9. zwroc nieprzeczytane jeszcze
     @GetMapping("/nieprzeczytane")
-    public List<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse(HttpSession session)
+    public List<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse()
     {
-        String username = (String) session.getAttribute("username");
+        Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(KsiazkaDTO::new).collect(Collectors.toList());
     }
+
+
 
 
 

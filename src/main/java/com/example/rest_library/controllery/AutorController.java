@@ -2,6 +2,7 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.AutorDTO;
 import com.example.rest_library.encje.Autor;
+import com.example.rest_library.encje.Przeczytane;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,4 +84,10 @@ public class AutorController {
         return autor.map(a -> ResponseEntity.ok(new AutorDTO(a))).orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/autorKsiazki")
+    public ResponseEntity<AutorDTO> findByKsiazkaId(@RequestParam Long id)
+    {
+        Optional<Autor> autor = autorService.findByKsiazkiId(id);
+        return autor.map(a -> ResponseEntity.ok(new AutorDTO(a))).orElse(ResponseEntity.notFound().build());
+    }
 }
