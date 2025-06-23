@@ -45,6 +45,7 @@ public class UzytkownikController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUzytkownik);
     }
 
+    /*
     // 2. dodaj uzytkownika i zwroc jego adres
     @PostMapping("/dodaj")
     public ResponseEntity<?> addUzytkownik2(@RequestBody Uzytkownik uzytkownik)
@@ -57,6 +58,8 @@ public class UzytkownikController {
         URI location = URI.create("/api/uzytkownicy/" + savedUzytkownik.getId());
         return ResponseEntity.created(location).body(savedUzytkownik);
     }
+
+     */
 
 
     // 3. znajdz po ID

@@ -24,5 +24,6 @@ public class Uzytkownik {
     private String imie;
     private String nazwisko;
 
+    private String rola;
 
 }

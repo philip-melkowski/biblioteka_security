@@ -36,8 +36,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> auth// ustalamy ktore sciezki wymagaja logowania
 
                         .requestMatchers("/", "/index.html", "/rejestracja.html").permitAll() // bez aut
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers(POST, "/api/uzytkownicy").permitAll()
+                        .requestMatchers("/api/ksiazki").hasRole("ADMIN") // tylko admin moze dodac ksiazke do bazy
+                        .requestMatchers(POST, "/api/autorzy").hasRole("ADMIN") // tylko admin moze dodac autora do bazy
+                        .requestMatchers("/api/**").permitAll() // wszystkie endpointy API na razie dostepn poza dodaniem ksiazki i autora
                         .anyRequest().authenticated() // wszystkie inne wymagaja logowania // po autoryzacji pozostale
 
                 );
