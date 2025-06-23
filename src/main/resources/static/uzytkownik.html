@@ -16,6 +16,7 @@
           <th>Tytuł</th>
           <th>Autor</th>
           <th>Ocena</th>
+          <th>Akcja</th>
       </tr>
       </thead>
   </table>
@@ -93,13 +94,32 @@
       const data = await response.text();
       return data;
   }
+
+  async function getUsernameId()
+  {
+        const response = await fetch("http://localhost:8080/api/uzytkownicy/getUserId",
+            {
+                method: "GET",
+                credentials: 'include'
+            });
+        if(!response.ok)
+        {
+            throw new Error("blad pobierania ID uzytkownika");
+        }
+        const data = await response.text()
+        return data;
+  }
+
   async function zaladujKsiazki(username) {
 
 
       const display = document.getElementById('display');
       display.textContent = username;
       try {
-          const response = await fetch('http://localhost:8080/api/przeczytane/uzytkownik/username/' + username);
+          const response = await fetch('http://localhost:8080/api/przeczytane/uzytkownik/username/' + username,
+              {
+                  credentials: 'include'
+              });
           if (!response.ok) {
               throw new Error("blad pobierana danych");
           }
@@ -108,7 +128,7 @@
           for(const item of data) {
 
               const autor = await getAutorByKsiazkaId(item.ksiazkaId);
-
+              const uzytkownikId = await getUsernameId();
 
               const row = document.createElement('tr');
               const idCell = document.createElement('td');
@@ -124,7 +144,34 @@
               row.appendChild(titleCell);
               row.appendChild(authorCell);
               row.appendChild(ratingCell);
+              const editCell = document.createElement('td');
+              const editButton = document.createElement('button');
+              editButton.textContent = "Zmień ocenę";
+              editButton.addEventListener('click', () => {
+                  const nowa = prompt("Podaj nowa ocene:");
+                  if(nowa != null && nowa < 6 && nowa > 0 && !isNaN(nowa))
+                  {
+                      fetch("/api/przeczytane",
+                          {
+                              credentials: 'include',
+                              method: "PUT",
+                              headers: {"Content-Type": "application/json"},
+                              body: JSON.stringify({
+                                  ksiazkaId: item.ksiazkaId,
+                                  uzytkownikId: uzytkownikId,
+                                  ocena: nowa
+                              })
+
+                          })
+                          .then(() => {
+                              location.reload();
+                      })
+                  }
+              })
+              editCell.appendChild(editButton);
+              row.appendChild(editCell);
               tabela.appendChild(row);
+
 
 
           }

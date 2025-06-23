@@ -2,6 +2,7 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.KsiazkaDTO;
 import com.example.rest_library.DTO.PrzeczytaneDTO;
+import com.example.rest_library.DTO.ZmienOceneDTO;
 import com.example.rest_library.encje.Przeczytane;
 import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.serwisy.PrzeczytaneService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -94,6 +96,22 @@ public class PrzeczytaneController {
             przeczytaneService.delete(p);
         });
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody ZmienOceneDTO dto)
+    {
+        Optional<Przeczytane> przeczytane = przeczytaneService.findByUzytkownikIdAndKsiazkaId(dto.getUzytkownikId(), dto.getKsiazkaId());
+        if(przeczytane.isEmpty())
+        {
+            System.out.println("Brak rekordu");
+            return ResponseEntity.notFound().build();
+        }
+
+        Przeczytane p = przeczytane.get();
+        p.setOcena(dto.getOcena());
+        System.out.println("rekord z nowa ocena: " + dto.getOcena());
+        return ResponseEntity.ok(przeczytaneService.save(p));
     }
 
 

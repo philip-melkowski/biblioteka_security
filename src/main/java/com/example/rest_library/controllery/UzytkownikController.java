@@ -123,7 +123,7 @@ public class UzytkownikController {
 
     // 8. zwraca ID zalogowanego uzytkownika
     @GetMapping("/getUserId")
-    public ResponseEntity<?> getUserId(HttpSession session)
+    public ResponseEntity<?> getUserId()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication!=null && authentication.isAuthenticated())
