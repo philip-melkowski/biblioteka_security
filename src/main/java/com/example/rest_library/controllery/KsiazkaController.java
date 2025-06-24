@@ -57,13 +57,24 @@ public class KsiazkaController {
 
     // 5. dodaj ksiazke
     @PostMapping()
-    public ResponseEntity<Ksiazka> addKsiazka(@RequestBody Ksiazka ksiazka)
+    public ResponseEntity<?> addKsiazka(@RequestBody  Ksiazka ksiazka)
     {
 
-        Ksiazka savedKsiazka = ksiazkaService.save(ksiazka);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedKsiazka);
+        if(ksiazka.getAutor() == null)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Brak autora");
+        }
+        if(!ksiazkaService.existsByTytulAndAutorId(ksiazka.getTytul(), ksiazka.getAutor().getId())) {
+            Ksiazka savedKsiazka = ksiazkaService.save(ksiazka);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedKsiazka);
+        }
+        else
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Juz istnieje taka ksiazka");
+        }
     }
 
+    /*
     // 6. dodaj ksiazke i zwroc jej adres w naglowku
     @PostMapping("/dodajZAdresem")
     public ResponseEntity<Ksiazka> addKsiazka2(@RequestBody Ksiazka ksiazka)
@@ -75,6 +86,7 @@ public class KsiazkaController {
 
 
     }
+     */
 
     // 7. usun ksiazke
     @DeleteMapping("/{id}")
@@ -98,6 +110,20 @@ public class KsiazkaController {
         Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(KsiazkaDTO::new).collect(Collectors.toList());
+    }
+
+    // 10. sprawdź, czy już istnieje książka autora o takim tytule
+    @GetMapping("/czyIstnieje")
+    public boolean czyIstnieje(@RequestParam String tytul, @RequestParam Long autorId)
+    {
+        if(ksiazkaService.existsByTytulAndAutorId(tytul, autorId))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 

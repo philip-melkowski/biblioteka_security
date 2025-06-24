@@ -11,6 +11,7 @@ public class KsiazkaDTO {
     String imieAutora;
     String nazwiskoAutora;
 
+
     public KsiazkaDTO(Ksiazka ksiazka)
     {
         id = ksiazka.getId();

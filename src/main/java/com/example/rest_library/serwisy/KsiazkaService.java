@@ -69,5 +69,6 @@ public class KsiazkaService {
 
     public List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(String username) { return ksiazkaRepository.findByUzytkownikUsernameAndPrzeczytaneFalse(username);}
 
+    public boolean existsByTytulAndAutorId(String tytul, long autorId) { return ksiazkaRepository.existsByTytulAndAutorId(tytul, autorId);}
 
 }

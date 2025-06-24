@@ -32,6 +32,8 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
 
     Optional<Ksiazka> findById(long id);
 
+    boolean existsByTytulAndAutorId(String tytul, long autorId);
+
     // zwraca nieprzeczytane przez uzytkownika ksiazki
     @Query("select k from Ksiazka k where NOT EXISTS (select p from Przeczytane p where p.ksiazka = k and p.uzytkownik.username = :username)")
     List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username);

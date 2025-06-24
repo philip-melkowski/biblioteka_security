@@ -22,6 +22,7 @@
 <input type="number" id="rok" placeholder="Wpisz rok"/>
 <input type="text" id="autorId" placeholder="Wpisz ID autora">
 <button onclick="dodajKsiazke()">Dodaj książkę</button>
+<p><input type="text" id="filtrujAutora" placeholder="Wpisz autora, zeby znalezc jego ID"/></p>
 <p id="dodano" style="color: black"></p>
 <p id="error" style="color: red"></p>
 
@@ -38,6 +39,55 @@
 
 <script>
 
+    async function dodajKsiazke() {
+        const tytul = document.getElementById("tytul").value;
+        const rok = parseInt(document.getElementById("rok").value);
+        const autorId = document.getElementById("autorId").value;
+        const response = await fetch('http://localhost:8080/api/ksiazki',
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tytul: tytul,
+                    rokWydania: rok,
+                    autor: {
+                        id: autorId
+                    }
+                })
+            }
+        )
+        if(response.status === 400)
+        {
+            document.getElementById("dodano").innerText= "";
+            document.getElementById("error").innerText = "Nie udało się dodać książki";
+            return;
+        }
+        if(response.status === 409)
+        {
+            document.getElementById("dodano").innerText= "";
+            document.getElementById("error").innerText = "ksiazka juz istnieje";
+            return;
+        }
+        if(response.status === 201)
+        {
+            document.getElementById("error").innerText = "";
+            document.getElementById("dodano").innerText = "Dodano książkę"
+            setTimeout(() =>
+            {
+                document.getElementById("dodano").classList.add("fade-out");
+            }, 500);
+            setTimeout(() =>
+            {
+                document.getElementById("dodano").innerText = "";
+                document.getElementById("dodano").classList.remove("fade-out");
+            }, 1000);
+
+        }
+
+    }
     async function getAutorzy() {
         const response = await fetch('http://localhost:8080/api/autorzy',
             {
@@ -48,6 +98,26 @@
         return autorzy;
     }
 
+    function filtruj()
+    {
+        const input = document.getElementById('filtrujAutora');
+        input.addEventListener("input", function()
+        {
+            const szukany = input.value.toLowerCase();
+            document.querySelectorAll("#tabela tr").forEach(tr =>
+            {
+                const dane = tr.cells[1].innerText.toLowerCase();
+                if(dane.includes(szukany))
+                {
+                    tr.style.display = "table-row";
+                }
+                else
+                {
+                    tr.style.display = "none";
+                }
+            })
+        })
+    }
     async function wypiszAutorow() {
 
         const autorzy = await getAutorzy();
@@ -66,7 +136,10 @@
 
         }
     }
-wypiszAutorow()
+wypiszAutorow().then(() =>
+{
+    filtruj();
+});
 </script>
 
 </body>
