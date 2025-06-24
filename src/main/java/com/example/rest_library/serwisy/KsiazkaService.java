@@ -32,13 +32,18 @@ public class KsiazkaService {
         return ksiazkaRepository.findByTytul(tytul);
     }
 
+    /*
     public List<Ksiazka> findByRokWydania(int rok) {
         return ksiazkaRepository.findByRokWydania(rok);
     }
+    */
 
+    /*
     public List<Ksiazka> findByRokWydaniaBetween(int start, int koniecRok) {
         return ksiazkaRepository.findByRokWydaniaBetween(start, koniecRok);
     }
+
+     */
 
     public void deleteByAutor(Autor autor) {
         ksiazkaRepository.deleteByAutor(autor);

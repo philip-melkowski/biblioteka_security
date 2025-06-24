@@ -19,7 +19,6 @@
 </head>
 <body>
 <input type="text" id="tytul" placeholder="Wpisz tytuł"/>
-<input type="number" id="rok" placeholder="Wpisz rok"/>
 <input type="text" id="autorId" placeholder="Wpisz ID autora">
 <button onclick="dodajKsiazke()">Dodaj książkę</button>
 <p><input type="text" id="filtrujAutora" placeholder="Wpisz autora, zeby znalezc jego ID"/></p>
@@ -41,7 +40,7 @@
 
     async function dodajKsiazke() {
         const tytul = document.getElementById("tytul").value;
-        const rok = parseInt(document.getElementById("rok").value);
+        //const rok = parseInt(document.getElementById("rok").value);
         const autorId = document.getElementById("autorId").value;
         const response = await fetch('http://localhost:8080/api/ksiazki',
             {
@@ -51,8 +50,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    tytul: tytul,
-                    rokWydania: rok,
+                    tytul: tytul, //rokWydania: rok,
                     autor: {
                         id: autorId
                     }

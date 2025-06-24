@@ -18,9 +18,9 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
 
     Optional<Ksiazka> findByTytul(String tytul);
 
-    List<Ksiazka> findByRokWydania(int rok);
+    //List<Ksiazka> findByRokWydania(int rok);
 
-    List<Ksiazka> findByRokWydaniaBetween(int startRok, int koniecRok);
+    //List<Ksiazka> findByRokWydaniaBetween(int startRok, int koniecRok);
 
     void deleteByAutor(Autor autor);
 
@@ -39,6 +39,6 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
     List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username);
 
     // zwraca srednia ocen dla ksiazki
-    @Query("select avg(p.ocena) from Przeczytane p where p.id = :id")
+    @Query("select avg(p.ocena) from Przeczytane p where p.ksiazka.id = :id")
     Double sredniaOcenKsiazkiById(@Param("id") Long id);
 }

@@ -48,12 +48,15 @@ public class KsiazkaController {
         return ksiazkaService.findByTytul(tytul).map(ksiazka -> ResponseEntity.ok(new KsiazkaDTO(ksiazka))).orElse(ResponseEntity.notFound().build());
     }
 
+    /*
     // 4. znajdz ksiazki po roku wydania
     @GetMapping("/rok")
     public List<KsiazkaDTO> findByRokWydania(@RequestParam int rok)
     {
         return ksiazkaService.findByRokWydania(rok).stream().map(KsiazkaDTO::new).collect(Collectors.toList());
     }
+
+     */
 
 
 

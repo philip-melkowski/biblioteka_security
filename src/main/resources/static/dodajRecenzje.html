@@ -12,7 +12,6 @@
         <th>ID</th>
         <th>Tytuł</th>
         <th>Autor</th>
-        <th>Rok</th>
         <th>Średnia ocena</th>
         <th>Oceń</th>
 
@@ -56,21 +55,18 @@
                 const row = document.createElement("tr");
                 const id = document.createElement("td");
                 const tytul = document.createElement("td");
-                const autor = document.createElement("td");
-                const rok = document.createElement("td");
+                const autor = document.createElement("td"); //const rok = document.createElement("td");
                 const sredniaOcena = document.createElement("td");
                 const ocena = document.createElement("td");
 
                 id.innerText = ksiazka.id;
                 tytul.innerText = ksiazka.tytul;
-                autor.innerText = ksiazka.imieAutora + " " + ksiazka.nazwiskoAutora;
-                rok.innerText = ksiazka.rokWydania;
+                autor.innerText = ksiazka.imieAutora + " " + ksiazka.nazwiskoAutora; // rok.innerText = ksiazka.rokWydania;
                 sredniaOcena.innerText = ksiazka.sredniaOcen;
 
                 row.appendChild(id);
                 row.appendChild(tytul);
-                row.appendChild(autor);
-                row.appendChild(rok);
+                row.appendChild(autor); // row.appendChild(rok);
                 row.appendChild(sredniaOcena);
 
 

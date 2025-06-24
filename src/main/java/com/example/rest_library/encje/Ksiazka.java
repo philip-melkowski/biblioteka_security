@@ -14,8 +14,8 @@ public class Ksiazka {
     @GeneratedValue
     private Long id;
     private String tytul;
-    @Column(name="rokwydania")
-    private int rokWydania;
+    //@Column(name="rokwydania")
+    //private int rokWydania;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "autorid", nullable = false)

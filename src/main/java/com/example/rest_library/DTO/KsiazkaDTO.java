@@ -7,7 +7,7 @@ import lombok.Getter;
 public class KsiazkaDTO {
     Long id;
     String tytul;
-    int rokWydania;
+    //int rokWydania;
     String imieAutora;
     String nazwiskoAutora;
     Double sredniaOcen;
@@ -22,7 +22,7 @@ public class KsiazkaDTO {
     {
         id = ksiazka.getId();
         tytul = ksiazka.getTytul();
-        rokWydania = ksiazka.getRokWydania();
+        //rokWydania = ksiazka.getRokWydania();
         imieAutora = ksiazka.getAutor().getImie();
         nazwiskoAutora = ksiazka.getAutor().getNazwisko();
         this.sredniaOcen = sredniaOcen;
