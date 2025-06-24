@@ -98,6 +98,8 @@ public class PrzeczytaneController {
         return ResponseEntity.noContent().build();
     }
 
+
+    // 10. zmiana oceny w rekordzie
     @PutMapping
     public ResponseEntity<?> update(@RequestBody ZmienOceneDTO dto)
     {

@@ -20,6 +20,7 @@
         <th>Tytuł</th>
         <th>Autor</th>
         <th>Ocena</th>
+        <th>Średnia ocena</th>
         <th>Akcja</th>
     </tr>
     </thead>
@@ -132,15 +133,23 @@
                 const titleCell = document.createElement('td');
                 const authorCell = document.createElement('td');
                 const ratingCell = document.createElement('td');
+                const avgCell = document.createElement('td');
                 idCell.textContent = item.ksiazkaId;
                 titleCell.textContent = item.ksiazkaTytul;
                 authorCell.textContent = autor.imie + " " + autor.nazwisko;
                 ratingCell.textContent = item.ocena ?? "Brak oceny";
+                avgCell.innerText = await fetch("http://localhost:8080/api/przeczytane/ksiazka/srednia/" + item.ksiazkaId,
+                    {
+                        method: "GET",
+                        credentials: 'include',
+                        headers: {"Accept": "application/json"}
+                    }).then(response => response.text());
 
                 row.appendChild(idCell);
                 row.appendChild(titleCell);
                 row.appendChild(authorCell);
                 row.appendChild(ratingCell);
+                row.appendChild(avgCell);
                 const editCell = document.createElement('td');
                 const editButton = document.createElement('button');
                 editButton.textContent = "Zmień ocenę";
