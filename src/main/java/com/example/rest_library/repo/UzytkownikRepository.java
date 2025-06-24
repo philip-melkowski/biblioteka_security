@@ -14,4 +14,5 @@ public interface UzytkownikRepository extends JpaRepository<Uzytkownik, Long>
     Optional<Uzytkownik> findById(Long id);
     Optional<Uzytkownik> findByUsername(String username);
     Optional<Uzytkownik> findByImieAndNazwisko(String imie, String nazwisko);
+    boolean existsUzytkownikByUsername(String username);
 }
