@@ -13,6 +13,8 @@
         <th>Tytuł</th>
         <th>Autor</th>
         <th>Rok</th>
+        <th>Średnia ocena</th>
+        <th>Oceń</th>
 
     </tr>
     </thead>
@@ -56,24 +58,27 @@
                 const tytul = document.createElement("td");
                 const autor = document.createElement("td");
                 const rok = document.createElement("td");
+                const sredniaOcena = document.createElement("td");
                 const ocena = document.createElement("td");
 
                 id.innerText = ksiazka.id;
                 tytul.innerText = ksiazka.tytul;
                 autor.innerText = ksiazka.imieAutora + " " + ksiazka.nazwiskoAutora;
                 rok.innerText = ksiazka.rokWydania;
+                sredniaOcena.innerText = ksiazka.sredniaOcen;
 
                 row.appendChild(id);
                 row.appendChild(tytul);
                 row.appendChild(autor);
                 row.appendChild(rok);
+                row.appendChild(sredniaOcena);
 
 
                 const select = document.createElement("td");
                 const radio = document.createElement("input");
                 radio.type = "radio";
-                radio.name = "ocena";
-                radio.value = ksiazka.id;
+                radio.name = "ocena"; // nazwa pola
+                radio.value = ksiazka.id; // dzieki temu zwracamy id ksiazki zaznaczonej
                 select.appendChild(radio);
 
                 row.appendChild(select);
@@ -114,7 +119,7 @@
         async function dodajRecenzje()
         {
             userId = await getUserId();
-            const wybrana = document.querySelector('input[name="ocena"]:checked');
+            const wybrana = document.querySelector('input[name="ocena"]:checked'); // znajduje ID ksiazki zaznaczonej
             if(!wybrana)
             {
                 alert("Zaznacz książkę!");

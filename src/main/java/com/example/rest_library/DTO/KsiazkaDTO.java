@@ -10,14 +10,22 @@ public class KsiazkaDTO {
     int rokWydania;
     String imieAutora;
     String nazwiskoAutora;
+    Double sredniaOcen;
 
 
     public KsiazkaDTO(Ksiazka ksiazka)
+    {
+        this(ksiazka, null);
+    }
+
+    public KsiazkaDTO(Ksiazka ksiazka, Double sredniaOcen)
     {
         id = ksiazka.getId();
         tytul = ksiazka.getTytul();
         rokWydania = ksiazka.getRokWydania();
         imieAutora = ksiazka.getAutor().getImie();
         nazwiskoAutora = ksiazka.getAutor().getNazwisko();
+        this.sredniaOcen = sredniaOcen;
+
     }
 }

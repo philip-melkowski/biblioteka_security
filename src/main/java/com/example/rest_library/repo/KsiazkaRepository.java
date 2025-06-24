@@ -38,4 +38,7 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
     @Query("select k from Ksiazka k where NOT EXISTS (select p from Przeczytane p where p.ksiazka = k and p.uzytkownik.username = :username)")
     List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username);
 
+    // zwraca srednia ocen dla ksiazki
+    @Query("select avg(p.ocena) from Przeczytane p where p.id = :id")
+    Double sredniaOcenKsiazkiById(@Param("id") Long id);
 }

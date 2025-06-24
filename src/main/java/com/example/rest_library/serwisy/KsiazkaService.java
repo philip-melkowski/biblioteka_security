@@ -71,4 +71,5 @@ public class KsiazkaService {
 
     public boolean existsByTytulAndAutorId(String tytul, long autorId) { return ksiazkaRepository.existsByTytulAndAutorId(tytul, autorId);}
 
+    public Double sredniaOcenKsiazkiById(Long id) { return ksiazkaRepository.sredniaOcenKsiazkiById(id);}
 }

@@ -3,6 +3,7 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.KsiazkaDTO;
 import com.example.rest_library.encje.Ksiazka;
+import com.example.rest_library.serwisy.PrzeczytaneService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class KsiazkaController {
 
     private final KsiazkaService ksiazkaService;
+    private final PrzeczytaneService przeczytaneService;
 
     // 1. znajdz wszystkie ksiazki
     @GetMapping
@@ -109,7 +111,7 @@ public class KsiazkaController {
     {
         Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(KsiazkaDTO::new).collect(Collectors.toList());
+        return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(k -> new KsiazkaDTO(k, przeczytaneService.sredniaOcenKsiazkiById(k.getId()))).collect(Collectors.toList());
     }
 
     // 10. sprawdź, czy już istnieje książka autora o takim tytule
@@ -125,6 +127,10 @@ public class KsiazkaController {
             return false;
         }
     }
+
+
+
+
 
 
 
