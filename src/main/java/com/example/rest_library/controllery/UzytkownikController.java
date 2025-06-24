@@ -85,7 +85,7 @@ public class UzytkownikController {
 
 
     
-    // 6. logowanie - jednak zbedne
+    // 6. logowanie - jednak zbedne - spring security domyślnie dodaje endpoint post /login, do logowania
     /*
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest)
