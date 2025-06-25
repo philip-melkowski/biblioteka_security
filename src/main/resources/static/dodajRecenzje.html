@@ -6,6 +6,7 @@
 </head>
 <body>
 <input type="text" id="filtrTytul" placeholder="Wpisz tyul, zeby znalezc ksiazke"/>
+<button id="dodajRecenzje" onclick="dodajRecenzje()" disabled>Oceń zaznaczoną książkę</button>
 <table id="tabela">
     <thead>
     <tr>
@@ -18,7 +19,7 @@
     </tr>
     </thead>
 </table>
-<button id="dodajRecenzje" onclick="dodajRecenzje()" disabled>Oceń zaznaczoną książkę</button>
+
     <script>
 
         let userId = null;
